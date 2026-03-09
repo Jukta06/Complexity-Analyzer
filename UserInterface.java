@@ -6,9 +6,8 @@ import java.util.Scanner;
 
 public class UserInterface {
 
-    
-    private static final String DESKTOP_DIRECTORY = "C:/Users/VICTUS/Desktop/";  
-    private static final String DOCUMENTS_DIRECTORY = "C:/Users/VICTUS/Documents/";  
+    private static final String DESKTOP_DIRECTORY = "C:/Users/VICTUS/Desktop/";
+    private static final String DOCUMENTS_DIRECTORY = "C:/Users/VICTUS/Documents/";
     private static Scanner scanner = new Scanner(System.in);
 
     public static String getInputCode() {

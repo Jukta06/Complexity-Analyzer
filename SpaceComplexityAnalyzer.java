@@ -4,6 +4,7 @@ public class SpaceComplexityAnalyzer {
     private Complexity totalSpaceComplexity = new Complexity("O(1)");
     private boolean isRecursive = false;
     private Set<String> visitedFunctions = new HashSet<>();
+    private int maxRecursionDepth = 0;
 
     public String analyze(ASTNode node) {
         analyzeNode(node);
@@ -20,7 +21,14 @@ public class SpaceComplexityAnalyzer {
                     analyzeNode(child);
                 }
                 break;
+            case FUNCTION_DECLARATION:
+            case FUNCTION_DEFINITION:
+                handleFunctionDeclaration(node);
+                break;
             case LOOP:
+            case FOR_LOOP:
+            case WHILE_LOOP:
+            case DO_WHILE_LOOP:
                 handleLoop(node);
                 break;
             case ARRAY_DECLARATION:
@@ -32,11 +40,11 @@ public class SpaceComplexityAnalyzer {
             case RETURN_STATEMENT:
                 handleReturnStatement(node);
                 break;
-            case FUNCTION_DECLARATION:
-                handleFunctionDeclaration(node);
-                break;
             case FUNCTION_CALL:
                 handleFunctionCall(node);
+                break;
+            case RECURSIVE_CALL:
+                handleRecursiveCall(node);
                 break;
             default:
                 break;
@@ -44,7 +52,7 @@ public class SpaceComplexityAnalyzer {
     }
 
     private void handleLoop(ASTNode node) {
-        
+
         for (ASTNode child : node.getChildren()) {
             analyzeNode(child);
         }
@@ -52,21 +60,20 @@ public class SpaceComplexityAnalyzer {
 
     private void handleArrayDeclaration(ASTNode node) {
         int dimensions = node.getDimensions().size();
-        
+
         if (dimensions == 1) {
             totalSpaceComplexity = totalSpaceComplexity.add(new Complexity("n", 2));
         } else {
             totalSpaceComplexity = totalSpaceComplexity.add(new Complexity("n", dimensions));
         }
-        
-        
+
         for (ASTNode child : node.getChildren()) {
             analyzeNode(child);
         }
     }
 
     private void handleNewInstance(ASTNode node) {
-       
+
         totalSpaceComplexity = totalSpaceComplexity.add(new Complexity("O(n)"));
     }
 
@@ -79,32 +86,65 @@ public class SpaceComplexityAnalyzer {
     }
 
     private void handleFunctionDeclaration(ASTNode node) {
-        String functionName = node.getValue();
-        if (visitedFunctions.contains(functionName)) {
-            isRecursive = true;
+        String functionName = node.getFunctionName();
+        if (functionName == null) {
+            functionName = node.getValue();
+        }
+
+        if (functionName != null) {
+            if (visitedFunctions.contains(functionName)) {
+                // Recursive function detected
+                isRecursive = true;
+            } else {
+                visitedFunctions.add(functionName);
+                // Analyze function body
+                for (ASTNode child : node.getChildren()) {
+                    analyzeNode(child);
+                }
+                visitedFunctions.remove(functionName);
+            }
         } else {
-            visitedFunctions.add(functionName);
+            // No function name, just analyze children
             for (ASTNode child : node.getChildren()) {
                 analyzeNode(child);
             }
-            visitedFunctions.remove(functionName);
         }
     }
 
     private void handleFunctionCall(ASTNode node) {
-        String functionName = node.getValue();
-        if (visitedFunctions.contains(functionName)) {
+        String functionName = node.getFunctionName();
+        if (functionName == null) {
+            functionName = node.getValue();
+        }
+
+        if (functionName != null && visitedFunctions.contains(functionName)) {
             isRecursive = true;
-        } else {
-            for (ASTNode child : node.getChildren()) {
-                analyzeNode(child);
-            }
+        }
+
+        for (ASTNode child : node.getChildren()) {
+            analyzeNode(child);
+        }
+    }
+
+    private void handleRecursiveCall(ASTNode node) {
+        // Recursive call detected
+        isRecursive = true;
+
+        // Analyze children
+        for (ASTNode child : node.getChildren()) {
+            analyzeNode(child);
         }
     }
 
     private String getSpaceComplexity() {
         if (isRecursive) {
-            return "O(n)";  
+            if (totalSpaceComplexity.toString().equals("O(1)")) {
+                return "O(n)";
+            } else {
+                Complexity recursionComplexity = new Complexity("O(n)");
+                Complexity combined = totalSpaceComplexity.add(recursionComplexity);
+                return combined.toString();
+            }
         }
         return totalSpaceComplexity.toString();
     }

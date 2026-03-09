@@ -1,12 +1,10 @@
 public class Complexity {
     private String complexity;
 
-    
     public Complexity(String notation) {
         this.complexity = notation;
     }
 
-    
     public Complexity(String notation, int exponent) {
         if (exponent == 0) {
             this.complexity = "O(1)";
@@ -17,7 +15,6 @@ public class Complexity {
         }
     }
 
-    
     public Complexity(String notation, boolean isKnown) {
         if (isKnown) {
             this.complexity = "O(" + notation + ")";
@@ -26,7 +23,6 @@ public class Complexity {
         }
     }
 
-   
     public Complexity add(Complexity other) {
         if (this.complexity.equals("O(1)")) {
             return other;
@@ -38,7 +34,6 @@ public class Complexity {
         }
     }
 
-    
     public Complexity multiply(Complexity other) {
         return new Complexity("O(" + this.complexity.substring(2, this.complexity.length() - 1) + " * " +
                 other.complexity.substring(2, other.complexity.length() - 1) + ")");

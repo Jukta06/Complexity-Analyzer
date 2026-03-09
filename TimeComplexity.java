@@ -1,12 +1,19 @@
 public class TimeComplexity {
 
     public enum ComplexityType {
-        CONSTANT, LINEAR, QUADRATIC, CUBIC, LOGARITHMIC, LINEARITHMIC, EXPONENTIAL, UNKNOWN
+        CONSTANT, // O(1) - ordinal 0
+        LOGARITHMIC, // O(log n) - ordinal 1
+        LINEAR, // O(n) - ordinal 2
+        LINEARITHMIC, // O(n log n) - ordinal 3
+        QUADRATIC, // O(n²) - ordinal 4
+        CUBIC, // O(n³) - ordinal 5
+        EXPONENTIAL, // O(2^n) - ordinal 6
+        UNKNOWN // Unknown - ordinal 7
     }
 
     private String description;
     private ComplexityType complexity;
-    private int degree; 
+    private int degree;
     public static final TimeComplexity CONSTANT = new TimeComplexity("Constant", ComplexityType.CONSTANT, 0);
     public static final TimeComplexity UNKNOWN = new TimeComplexity("Unknown", ComplexityType.UNKNOWN, 0);
 
