@@ -9,29 +9,27 @@ public class UserInterface {
     
     private static final String DESKTOP_DIRECTORY = "C:/Users/VICTUS/Desktop/";  
     private static final String DOCUMENTS_DIRECTORY = "C:/Users/VICTUS/Documents/";  
+    private static Scanner scanner = new Scanner(System.in);
 
     public static String getInputCode() {
-        try (Scanner scanner = new Scanner(System.in)) {
+        System.out.println("Please choose your input method:");
+        System.out.println("1: Enter code via text");
+        System.out.println("2: Provide a file name");
 
-            System.out.println("Please choose your input method:");
-            System.out.println("1: Enter code via text");
-            System.out.println("2: Provide a file name");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            String code = "";
-            if (choice == 1) {
-                code = getTextInput(scanner);
-            } else if (choice == 2) {
-                code = getFileInput(scanner);
-            } else {
-                System.out.println("Invalid choice. Exiting.");
-                System.exit(1);
-            }
-
-            return code;
+        String code = "";
+        if (choice == 1) {
+            code = getTextInput(scanner);
+        } else if (choice == 2) {
+            code = getFileInput(scanner);
+        } else {
+            System.out.println("Invalid choice.");
+            return "";
         }
+
+        return code;
     }
 
     private static String getTextInput(Scanner scanner) {
@@ -51,27 +49,26 @@ public class UserInterface {
         Path filePath = locateFile(fileName);
 
         if (filePath == null) {
-            System.out.println("File does not exist in Desktop or Documents directories, or it cannot be read. Exiting.");
-            System.exit(1);
+            System.out.println("File does not exist in Desktop or Documents directories, or it cannot be read.");
+            return "";
         }
 
         String fileType = detectFileType(fileName);
         if (fileType.equals("Unknown")) {
             System.out.println("Unsupported file type. Please provide a C or Java file.");
-            System.exit(1);
+            return "";
         }
 
         try {
             String code = new String(Files.readAllBytes(filePath));
             if (code.trim().isEmpty()) {
-                System.out.println("The file is empty. Exiting.");
-                System.exit(1);
+                System.out.println("The file is empty.");
+                return "";
             }
             return code;
         } catch (IOException e) {
-            System.out.println("Error reading the file. Exiting.");
+            System.out.println("Error reading the file.");
             e.printStackTrace();
-            System.exit(1);
             return "";
         }
     }
