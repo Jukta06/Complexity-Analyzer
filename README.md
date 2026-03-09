@@ -1,1 +1,38 @@
-The Complexity Analyzer is a Java-based software tool designed to evaluate the time complexity and space complexity of the codes written in C and Java language. With this application, user can input any piece of code and receive time complexity and space complexity of the code.Simply user can input his code by text or by file name into the application’s interface. Once the code is inputted, Complexity Analyzer meticulously examines its time complexity and space complexity. It considers various factors such as loops, recursive calls and data structures used within the code. After analysis, this display the time complexity and space complexity of the given code using Big O notation.The Complexity Analyzer outputs the worst-case time complexity and space complexity.
+# Complexity Analyzer
+
+##  Project Overview
+
+Complexity Analyzer is a software tool designed to analyze the **time complexity and space complexity** of user-provided source code. The system allows users to input code written in **C or Java** either by pasting the code or by providing a file. The program then analyzes the code structure and determines its computational complexity in **Big-O notation**.
+
+This project helps programmers and students understand how efficient their algorithms are.
+
+---
+
+# Objectives
+
+* Automatically analyze algorithm efficiency.
+* Determine **worst-case time complexity** of code.
+* Detect patterns.
+* Compute **space complexity**.
+
+---
+
+##  Technologies Used
+
+* Programming Language: **Java**
+* Code Parsing: Custom tokenizer and parser
+* Development Environment: **Visual Studio Code**
+
+
+---
+
+##  Features
+
+* Accepts **C and Java code input**
+* Detects algorithm patterns
+* Calculates **time complexity**
+* Calculates **space complexity**
+* Displays results using **Big-O notation**
+
+
+
